@@ -8,21 +8,21 @@
   runtimeDir ? "/run/pixelfed",
 }:
 let
-  php' = php.withExtensions ({ enabled, all }: enabled ++ (with all; [ ffi ]));
+  php' = php.withExtensions ({ enabled, all }: enabled ++ (with all; [ ffi redis ]));
 in
 php'.buildComposerProject2 (finalAttrs: {
   pname = "pixelfed";
-  version = "0.12.7";
+  # 0.15.5 will require php >=8.4
+  version = "0.15.2";
 
   src = fetchFromGitHub {
     owner = "pixelfed";
     repo = "pixelfed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ay1WJWEPwzeTtScaj+g72lsoWODeHWtjnQT5aa6epbU=";
+    hash = "sha256-50SjsCPCNmErBfAe0dYl0bpaWoJ3v2qikABcpCgEkmQ=";
   };
 
-  vendorHash = "sha256-RNJzvWrKfxr2uBFtc05N1pUfBmvy01JiJHMWgtJ01pA=";
-
+  vendorHash = "sha256-QCfbArftb6+SZXsvaDET/IyyyaSV+HosU9ckBrnnm3s= ";
   postInstall = ''
     chmod -R u+w $out/share
     mv "$out/share/php/pixelfed"/* $out
