@@ -66,7 +66,7 @@ in
     pixelfed = {
       enable = mkEnableOption "a Pixelfed instance";
       package = mkPackageOption pkgs "pixelfed" { };
-      phpPackage = mkPackageOption pkgs "php83" { };
+      phpPackage = mkPackageOption pkgs "php84" { };
 
       user = mkOption {
         type = types.str;
@@ -437,7 +437,7 @@ in
         # Before running any PHP program, cleanup the code cache.
         # It's necessary if you upgrade the application otherwise you might
         # try to import non-existent modules.
-        rm -f ${cfg.runtimeDir}/app.php
+        rm -f ${cfg.runtimeDir}/*.php
         rm -rf ${cfg.runtimeDir}/cache/*
 
         # Concatenate non-secret .env and secret .env
@@ -455,9 +455,11 @@ in
         chmod g+x ${cfg.dataDir}/storage ${cfg.dataDir}/storage/app
         chmod -R g+rX ${cfg.dataDir}/storage/app/public
 
-        # Link the app.php in the runtime folder.
+        # Link the php files in the runtime folder.
         # We cannot link the cache folder only because bootstrap folder needs to be writeable.
         ln -sf ${pixelfed}/bootstrap-static/app.php ${cfg.runtimeDir}/app.php
+        ln -sf ${pixelfed}/bootstrap-static/providers.php ${cfg.runtimeDir}/providers.php
+        ln -sf ${pixelfed}/bootstrap-static/scheduledtasks.php ${cfg.runtimeDir}/scheduledtasks.php
 
         # https://laravel.com/docs/10.x/filesystem#the-public-disk
         # Creating the public/storage → storage/app/public link
