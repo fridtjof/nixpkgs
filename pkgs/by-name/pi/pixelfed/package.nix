@@ -29,6 +29,7 @@ php'.buildComposerProject2 (finalAttrs: {
     rm -R $out/bootstrap/cache
     # Move static contents for the NixOS module to pick it up, if needed.
     mv $out/bootstrap $out/bootstrap-static
+    sed -i 's#instanceof AuthenticationException#instanceof AuthenticationException) {error_log($e->getTraceAsString());//#' $out/bootstrap-static/app.php
     mv $out/storage $out/storage-static
     ln -s ${dataDir}/.env $out/.env
     ln -s ${dataDir}/storage $out/
